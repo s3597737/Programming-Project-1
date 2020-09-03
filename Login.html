@@ -1,0 +1,86 @@
+<html>
+  
+  <head>
+    <title>Login</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.4.0/css/bootstrap.min.css" rel="stylesheet"></head>
+  
+  <body style=" background-color:#c4e3f3; background-size: 90%;">
+    <div class="modal-dialog" style="margin-top: 10%;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title text-center" id="myModalLabel">Login</h4></div>
+        <div class="modal-body" id="model-body">
+          <div class="form-group">
+            <input type="email" class="form-control" placeholder="Email" autocomplete="off" id="email"></div>
+          <div class="form-group">
+            <input type="password" class="form-control" placeholder="Password" autocomplete="off" id="pass"></div>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group">
+            <button type="button" class="btn btn-primary form-control" onclick="login()">Login</button></div>
+        </div>
+      </div>
+      <!-- /.modal-content --></div>
+    <!-- /.modal --></body>
+  
+  <body>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-analytics.js"></script>
+    <script>// Initialize Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBovWHuhafQZFO-O_LBdvbi7H_s4Nl6SWA",
+        authDomain: "hello-world-dc1cf.firebaseapp.com",
+        databaseURL: "https://hello-world-dc1cf.firebaseio.com",
+        projectId: "hello-world-dc1cf",
+        storageBucket: "hello-world-dc1cf.appspot.com",
+        messagingSenderId: "773498443896",
+        appId: "1:773498443896:web:2c69f7b7351b8622ecb58d",
+        measurementId: "G-VVCR51WKZZ"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+      function login() {
+        Email = document.getElementById("email").value;
+        Password = document.getElementById("pass").value;
+        if (Email.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) != -1) {
+
+} else { //return true;
+          alert("Error Email!");
+          return flase;
+        }
+        if (Password != "") {
+          firebase.auth().signInWithEmailAndPassword(Email, Password).then(function() {
+            alert("Login success!")
+          }).
+          catch(function(error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert("Login failed!" + errorMessage);
+          });
+        } else {
+          alert("The password can not be empty!")
+        }
+      }
+      // firebase.auth().onAuthStateChanged(function(user) {
+      //     if (user) {
+      //         // User is signed in.
+      //         var displayName = user.displayName;
+      //         var email = user.email;
+      //         var emailVerified = user.emailVerified;
+      //         var photoURL = user.photoURL;
+      //         var isAnonymous = user.isAnonymous;
+      //         var uid = user.uid;
+      //         var providerData = user.providerData;
+      //         alert("Login successful");
+      //         alert(displayName+"|"+email+"|"+emailVerified+"|"+photoURL+"|"+isAnonymous+"|"+uid+"|"+providerData)
+      //     } else {
+      //         // User is signed out.
+      //         // ...
+      //     }
+      // });
+      </script>
+  </body>
+
+</html>
