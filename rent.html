@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CAR RENT</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFG61fggYOgHnu8ne79Q4OFSlzAuo9cBE&callback=initMap" async defer></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-firestore.js"></script>
+
+    <script src="static/main.js"></script>
+    <script>
+        var map;
+        var markers = [];
+        var latlng = '';
+        var first = true;
+        var curInfoWindows = null;
+        var searchFlag = [];
+
+        function initMap()
+        {
+            let params = GetRequest();
+            var caption = document.getElementById("caption")
+
+            if (caption != null)
+            {
+                caption.innerHTML = 'Mobile Drive - ' + params.name
+            }
+
+            latlng = new google.maps.LatLng(params.lat, params.lng);
+            var opts = {
+                zoom:17,
+                center:latlng,
+            }
+            if(!map){
+                map = new google.maps.Map(document.getElementById("googleMap"),opts);
+
+                var icon = 'http://maps.google.com/mapfiles/ms/micons/green.png';
+                map.setCenter(latlng);
+                var marker = new google.maps.Marker({
+                    map:map,
+                    icon:icon,
+                    position:latlng,
+                });
+
+                var content = '<span>'+ params.name +'</span>';
+                var infowindow = new google.maps.InfoWindow({ content: content });
+                marker.curInfoWindows = infowindow;
+                infowindow.open(map,marker);
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h2 id="caption">Mobile Drive</h2>
+        <button class="btn btn-primary" onclick="window.location.href='index.html'">Home</button>
+        <button class="btn btn-default" onclick="window.location.href='orders.html'">Orders</button>
+    </div>
+
+    <div class="row">
+        <div id="googleMap" style="height:400px;min-height:400px;border:1px solid #ddd;"></div>
+    </div>
+
+    <div class="row" style="margin-top: 20px">
+        <table class="table table-hover car-container">
+            <tr><th>Make</th><th>Model</th><th>Year</th><th>Option</th></tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+
+<script>
+    setTimeout(function ()
+    {
+        initCars()
+    },1000)
+
+    function initCars()
+    {
+        let params = GetRequest();
+        if (cars.length <= 0)
+        {
+            initCars();
+        }
+
+        if (params)
+        {
+            let id = params.id
+            let carInfo = cars.filter(function (car)
+            {
+                return car.in_use == false && car.site_id == id;
+            })
+
+            var t = ''
+            $.each(carInfo, function (k,v)
+            {
+                t += `<tr><td>${ v.make }</td><td>${ v.model }</td><td>${ v.year }</td><td><button class="btn btn-sm btn-primary order-car" data-car-id="${ v.id }" data-site-id="${ v.site_id }">Pick Up</button></td></tr>`
+            })
+            $('.car-container').append(t)
+
+        }
+    }
+
+    /**
+     * 租车
+     */
+    $('body').on('click', '.order-car', function ()
+    {
+        let car_id = $(this).data('car-id')
+        let site_id = $(this).data('site-id')
+
+        // db.collection("cars").where('id', '==', car_id).update(
+        //         {
+        //             [in_use]: true
+        //         }
+        // )
+
+        db.collection("orders").add({
+            car_id: car_id,
+            site_id: site_id,
+            uid: UID,
+            returned: false
+        })
+        .then(function()
+        {
+            alert('success')
+            // console.log("Document written with ID: ", docRef.id);
+        })
+        .catch(function(error)
+        {
+            console.error("Error adding document: ", error);
+        });
+    })
+</script>
