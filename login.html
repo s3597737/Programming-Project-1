@@ -78,7 +78,7 @@ div {text-align: center;}
         }//return true;
         else
         {
-            alert("Error Email!");
+            alert("Error! The email adress is not correct");
             return flase;
         }
         if(Password!="")
@@ -94,26 +94,10 @@ div {text-align: center;}
         }
         else
         {
-            alert("The password can not be empty!")
+            alert("Error! The password can not be empty!")
         }
     }
-    // firebase.auth().onAuthStateChanged(function(user) {
-    //     if (user) {
-    //         // User is signed in.
-    //         var displayName = user.displayName;
-    //         var email = user.email;
-    //         var emailVerified = user.emailVerified;
-    //         var photoURL = user.photoURL;
-    //         var isAnonymous = user.isAnonymous;
-    //         var uid = user.uid;
-    //         var providerData = user.providerData;
-    //         alert("Login successful");
-    //         alert(displayName+"|"+email+"|"+emailVerified+"|"+photoURL+"|"+isAnonymous+"|"+uid+"|"+providerData)
-    //     } else {
-    //         // User is signed out.
-    //         // ...
-    //     }
-    // });
+
 </script>
 </body>
 </html>
