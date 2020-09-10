@@ -713,8 +713,8 @@ ul.list-2 li span a {
 	top: 30px;
 }
 .comments-area input[type="text"] {
-	padding: 7px 15px;
-	width: 47%;
+	padding: 7px 14px;
+	width: 45%;
 	color: #222;
 	font-size: 13px;
 	border: none;
@@ -728,7 +728,7 @@ ul.list-2 li span a {
 	color: #222;
 	font-size: 13px;
 	outline: none;
-	height: 100px;
+	height: 99px;
 	display: block;
 	border: none;
 	background: #F0F0F0;
@@ -776,8 +776,8 @@ ul.list-2 li span a {
 	width:100%;
 }
 .span_1_of_3 {
-	width: 29.2%;
-	padding:1.5%; 
+	width: 29.1%;
+	padding:1.4%; 
 }
 .span_2_of_c h3 {
 	font-size: 1.8em;
@@ -819,7 +819,7 @@ ul.list-2 li span a {
 	height:120px;		
 }
 .contact-form input[type="submit"]{
-	padding:7px 20px;
+	padding:7px 19px;
 	color:#FFF;
 	cursor:pointer;
 	background:#D54F30 url(../images/large-button-overlay.png);
