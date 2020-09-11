@@ -72,7 +72,7 @@ body{
 }
 .search input[type="text"] {
 	border: 1px solid #BABDB9;
-	font-size: 13px;
+	font-size: 12px;
 	width: 248px;
 	height: 31px;
 	outline: none;
@@ -234,7 +234,7 @@ body{
 	z-index:1;
 }
 #slideshow ul{
-	height:425px;
+	height:424px;
 	left:0px;
 	list-style:none outside none;
 	overflow:hidden;
