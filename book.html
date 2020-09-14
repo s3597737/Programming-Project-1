@@ -54,9 +54,10 @@ var map;
 
             $.each(sites, function (k,site)
             {
+                let latlng = new google.maps.LatLng(site.lat, site.lng);
+
                 var content = '<span>'+ site.name +'<\/span>';
                 var infowindow = new google.maps.InfoWindow({ content: content });
-                let latlng = new google.maps.LatLng(site.lat, site.lng);
 
                 map.setCenter(latlng);
                 var marker = new google.maps.Marker({
@@ -84,7 +85,8 @@ var map;
             <div class="row">
                 <h2>
                     Mobile Drive - Select a site
-                </h2><button class="btn btn-primary" onclick="window.location.href='index.html'">Home</button> <button class="btn btn-default" onclick="window.location.href='orders.html'">Orders</button>
+                </h2><button class="btn btn-primary" onclick="window.location.href='index.html'">Home</button> 
+                <button class="btn btn-default" onclick="window.location.href='orders.html'">Orders</button>
             </div>
             <div class="row">
                 <div id="googleMap" style="height:800px;min-height:800px;border:1px solid #ddd;"></div>
