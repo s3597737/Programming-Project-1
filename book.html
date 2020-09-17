@@ -49,7 +49,8 @@ var map;
             }
         }
 
-        function markSites(){
+        function markSites()
+        {
             var icon = 'http://maps.google.com/mapfiles/ms/micons/red.png';
 
             $.each(sites, function (k,site)
@@ -68,7 +69,8 @@ var map;
                 marker.curInfoWindows = infowindow;
                 infowindow.open(map,marker);
 
-                marker.addListener('click',function(){
+                marker.addListener('click',function()
+                {
                     if(curInfoWindows)
                     {
                         curInfoWindows.close();
@@ -81,23 +83,11 @@ var map;
         </script>
     </head>
     <body>
-        ar firebaseConfig = {
-        apiKey: "AIzaSyD_gcMOfUCGhDgsv6kbE_oQkEC6kRR66jo",
-        authDomain: "mobile-drive-56512.firebaseapp.com",
-        databaseURL: "https://mobile-drive-56512.firebaseio.com",
-        projectId: "mobile-drive-56512",
-        storageBucket: "mobile-drive-56512.appspot.com",
-        messagingSenderId: "167101083432",
-        appId: "1:167101083432:web:bcd322dc6f2ffe4ecb6a1d"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
         <div class="container">
             <div class="row">
                 <h2>
                     Mobile Drive - Select a site
-                </h2><button class="btn btn-primary" onclick="window.location.href='index.html'">Home</button> 
-                <button class="btn btn-default" onclick="window.location.href='orders.html'">Orders</button>
+                </h2><button class="btn btn-primary" onclick="window.location.href='index.html'">Home</button> <button class="btn btn-default" onclick="window.location.href='orders.html'">Orders</button>
             </div>
             <div class="row">
                 <div id="googleMap" style="height:800px;min-height:800px;border:1px solid #ddd;"></div>
@@ -107,12 +97,4 @@ var map;
             </div>
         </div>
     </body>
-     <div class="clear"></div>
-                                <div class="footer-bottom">
-                                    <div class="copy">
-                                        <p>
-                                            Copyright © 2020 RMIT UNIVERSITY<a target="_blank" href="https://www.rmit.edu.au/">RMIT</a>
-                                        </p>
-                                    </div>
-                                </div>
 </html>
