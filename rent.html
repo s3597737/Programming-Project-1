@@ -29,11 +29,13 @@ var map;
         var curInfoWindows = null;
         var searchFlag = [];
 
-        function initMap(){
+        function initMap()
+        {
             let params = GetRequest();
             var caption = document.getElementById("caption")
 
-            if (caption != null){
+            if (caption != null)
+            {
                 caption.innerHTML = 'Mobile Drive - ' + params.name
             }
 
@@ -66,13 +68,12 @@ var map;
             <div class="row">
                 <h2 id="caption">
                     Mobile Drive
-                </h2><button class="btn btn-primary" onclick="window.location.href='index.html'">Home</button> 
-                <button class="btn btn-default" onclick="window.location.href='orders.html'">Orders</button>
+                </h2><button class="btn btn-primary" onclick="window.location.href='index.html'">Home</button> <button class="btn btn-default" onclick="window.location.href='orders.html'">Orders</button>
             </div>
             <div class="row">
                 <div id="googleMap" style="height:400px;min-height:400px;border:1px solid #ddd;"></div>
             </div>
-            <div class="row" style="margin-top: 15px">
+            <div class="row" style="margin-top: 20px">
                 <table class="table table-hover car-container">
                     <tr>
                         <th>
@@ -96,50 +97,50 @@ setTimeout(function ()
         initCars()
         },1000)
 
-        function initCars(){
-            let params = GetRequest();
-            if (cars.length <= 0){
-                initCars();
-            }
-            
-            if (params){
-                let id = params.id
-                let carInfo = cars.filter(function (car){
+        function initCars()
+        {
+        let params = GetRequest();
+        if (cars.length <= 0)
+        {
+            initCars();
+        }
+
+        if (params)
+        {
+            let id = params.id
+            let carInfo = cars.filter(function (car)
+            {
                 return car.in_use == false && car.site_id == id;
             })
 
             var t = ''
-            $.each(carInfo, function (k,v){
+            $.each(carInfo, function (k,v)
+            {
                 t += `<tr><td>${ v.make }<\/td><td>${ v.model }<\/td><td>${ v.year }<\/td><td><button class="btn btn-sm btn-primary order-car" data-car-id="${ v.id }" data-site-id="${ v.site_id }">Pick Up<\/button><\/td><\/tr>`
             })
             $('.car-container').append(t)
-            }
+
         }
-        $('body').on('click', '.order-car', function (){
-            let car_id = $(this).data('car-id')
-            let site_id = $(this).data('site-id')
-            db.collection("orders").add({
-                car_id: car_id,
-                site_id: site_id,
-                uid: UID,
-                returned: false
-            })
-                .then(function()
-                      {
-                alert('success')
-            })
-                .catch(function(error){
-                console.error("Error adding document: ", error);
-            });
+        }
+        $('body').on('click', '.order-car', function ()
+        {
+        let car_id = $(this).data('car-id')
+        let site_id = $(this).data('site-id')
+        db.collection("orders").add({
+            car_id: car_id,
+            site_id: site_id,
+            uid: UID,
+            returned: false
+        })
+        .then(function()
+        {
+            alert('success')
+        })
+        .catch(function(error)
+        {
+            console.error("Error adding document: ", error);
+        });
         })
         </script>
     </body>
-     <div class="clear"></div>
-                                <div class="footer-bottom">
-                                    <div class="copy">
-                                        <p>
-                                            Copyright © 2020 RMIT UNIVERSITY<a target="_blank" href="https://www.rmit.edu.au/">RMIT</a>
-                                        </p>
-                                    </div>
-                                </div>
 </html>
