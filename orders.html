@@ -50,26 +50,21 @@
                 </table>
             </div>
         </div><script type="text/javascript">
-        ar firebaseConfig = {
-        apiKey: "AIzaSyD_gcMOfUCGhDgsv6kbE_oQkEC6kRR66jo",
-        authDomain: "mobile-drive-56512.firebaseapp.com",
-        databaseURL: "https://mobile-drive-56512.firebaseio.com",
-        projectId: "mobile-drive-56512",
-        storageBucket: "mobile-drive-56512.appspot.com",
-        messagingSenderId: "167101083432",
-        appId: "1:167101083432:web:bcd322dc6f2ffe4ecb6a1d"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
 initOrders()
 
-        function initOrders(){
+        function initOrders()
+        {
         var orders = db.collection("orders");
         var query = orders.where("uid", "==", UID);
         var t = ''
 
-        query.get().then((querySnapshot) =>{
-            querySnapshot.forEach((doc) =>{
+        /**
+         * 查询所有的租车信息
+         */
+        query.get().then((querySnapshot) =>
+        {
+            querySnapshot.forEach((doc) =>
+            {
                 let data = doc.data();
                 let car_id = data.car_id;
                 let site_id = data.site_id;
@@ -103,6 +98,10 @@ initOrders()
             });
         });
         }
+
+        /**
+        * 还车
+        */
         $('body').on('click', '.return-car', function ()
         {
         let docid = $(this).data('docid')
@@ -113,12 +112,14 @@ initOrders()
         return washingtonRef.update({
             is_return: 1
         })
-            .then(function(){
+            .then(function()
+            {
                 alert('success')
                 console.log("Document successfully updated!");
                 window.location.reload()
             })
-            .catch(function(error){
+            .catch(function(error)
+            {
                 // The document probably doesn't exist.
                 console.error("Error updating document: ", error);
             });
