@@ -85,7 +85,7 @@ body{
     background:url(../images/bg-body.jpg)repeat;
 } 
 .wrap{ 
-    width:90%; 
+    width:89%; 
     margin:0 auto; 
     -moz-transition:all .2s linear; 
     -webkit-transition:all .2s linear; 
