@@ -27,16 +27,16 @@ form {
             #left {
                 float: left;
                 /* background-color:gray; */
-                width: 300px;
-                height: 280px;
+                min-width: 100px;
+                min-height: 100px;
                 margin-left: 20px;
             }
 
             #left img {
                 height: 150px;
-                width: 150px;
+                width: auto;
                 border: #000000;
-                margin-left: 75px;
+                
             }
 
             #left div {
@@ -79,8 +79,8 @@ form {
             
             
             .image-preview{
-                width:300px;
-                min-height:100px;
+                min-width:auto;
+                min-height:auto;
                 border: 2px solid #dddddd;
                 margin-top: 15px;
                 
@@ -94,7 +94,7 @@ form {
             
             .image-preview__image{
                 display: none;
-                width:100%;
+                width:auto;
                 
             }
             
@@ -109,36 +109,29 @@ form {
                 </div><input type="file" name="inputFile" id="inpFile">
                 <div class="image-preview" id="imagePreview">
                     <img src="" alt="image Preview" class="image-preview__image"> <span class="image-preview__default-text">image Preview</span>
-                </div><script type="text/javascript">
-const inpFile = document.getElementById("inpFile");
-                const previewContainer = document.getElementById("imagePreview");
-                const previewImage = previewContainer.querySelector(".image-preview__image");
-                const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
-
-                inpFile.addEventListener("change",function() {
+                </div>
+                <script type="text/javascript">
+                    const inpFile = document.getElementById("inpFile");
+                    const previewContainer = document.getElementById("imagePreview");
+                    const previewImage = previewContainer.querySelector(".image-preview__image");
+                    const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
+                    inpFile.addEventListener("change",function() {
                     const file = this.files[0];
+                    if(file){
+                        const reader = new FileReader();
+                        previewDefaultText.style.display = "none";
+                        previewImage.style.display = "block";
+                        reader.addEventListener("load",function(){
+                            previewImage.setAttribute("src",this.result);
+                        });
                     
-
-                if(file){
-                    const reader = new FileReader();
-                    
-                    previewDefaultText.style.display = "none";
-                    previewImage.style.display = "block";
-                    
-                    reader.addEventListener("load",function(){
-                        
-                        previewImage.setAttribute("src",this.result);
-                    });
-                    
-                    reader.readAsDataURL(file);
-                }else{
-                    previewDefaultText.style.display = "null";
-                    previewImage.style.display = "null";
-                    previewImage.setAttribute("src","");
-                }
-                    
+                        reader.readAsDataURL(file);
+                    }else{
+                        previewDefaultText.style.display = "null";
+                        previewImage.style.display = "null";
+                        previewImage.setAttribute("src","");
+                    }
                 });
-
                 </script>
             </div>
             <div class="right" id="right">
