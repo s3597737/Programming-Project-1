@@ -109,6 +109,20 @@ form {
                 <div class="image-preview" id="imagePreview">
                     <img src="" alt="image Preview" class="image-preview__image"> <span class="image-preview__default-text">image Preview</span>
                 </div>
+                <script>
+                    // Initialize Firebase
+    var firebaseConfig = {
+        apiKey: "AIzaSyD_gcMOfUCGhDgsv6kbE_oQkEC6kRR66jo",
+        authDomain: "mobile-drive-56512.firebaseapp.com",
+        databaseURL: "https://mobile-drive-56512.firebaseio.com",
+        projectId: "mobile-drive-56512",
+        storageBucket: "mobile-drive-56512.appspot.com",
+        messagingSenderId: "167101083432",
+        appId: "1:167101083432:web:bcd322dc6f2ffe4ecb6a1d"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+                </script>
                 <script type="text/javascript">
                     const inpFile = document.getElementById("inpFile");
                     const previewContainer = document.getElementById("imagePreview");
