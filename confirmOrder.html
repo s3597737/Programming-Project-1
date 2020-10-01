@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Order</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+          crossorigin="anonymous">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-firestore.js"></script>
+
+    <script src="static/main.js"></script>
+    <script>
+        var map;
+        var markers = [];
+        var latlng = '';
+        var first = true;
+        var curInfoWindows = null;
+        var searchFlag = [];
+
+        function initMap()
+        {
+            let params = GetRequest();
+            var caption = document.getElementById("caption");
+
+            if (caption != null)
+            {
+                caption.innerHTML = 'Mobile Drive - ' + params.name
+            }
+
+            latlng = new google.maps.LatLng(params.lat, params.lng);
+            var opts = {
+                zoom:17,
+                center:latlng,
+            }
+            if(!map){
+                map = new google.maps.Map(document.getElementById("googleMap"),opts);
+
+                var icon = 'http://maps.google.com/mapfiles/ms/micons/green.png';
+                map.setCenter(latlng);
+                var marker = new google.maps.Marker({
+                    map:map,
+                    icon:icon,
+                    position:latlng,
+                });
+
+                var content = '<span>'+ params.name +'</span>';
+                var infowindow = new google.maps.InfoWindow({ content: content });
+                marker.curInfoWindows = infowindow;
+                infowindow.open(map,marker);
+            }
+        }
+    </script>
+
+    <script>
+        function jump2pay(){
+            window.location.href="./payment.html";
+        }
+        setTimeout(function ()
+        {
+            initCars()
+        },1000);
+
+        function initCars()
+        {
+            let params = GetRequest();
+            if (cars.length <= 0)
+            {
+                initCars();
+            }
+
+            if (params)
+            {
+                let carID = params.car_id;
+                let siteID = params.site_id;
+                let carInfo = cars.filter(function (car)
+                {
+                    return car.site_id == siteID && car.car_id == carID;
+                });
+                console.log(carInfo);
+                let t = '';
+                $.each(carInfo, function (k,v)
+                {
+                    t += `<tr><td>${ v.make }</td><td>${ v.model }</td><td>${ v.year }</td></tr>`
+                });
+                $('.car-container').append(t);
+            }
+        }
+    </script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light sticky-top" style="background-color: #e3f2fd;">
+    <a class="navbar-brand mb-0 h1" href="#">Mobile Drive</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="./index.html">Home Page<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./about.html">About us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./book.html">Book now</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link disabled active" href="./orders.html">Orders</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./userprofile.html">User Profile</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Others
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">other1</a>
+                    <a class="dropdown-item" href="#">other2</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Waiting for More</a>
+                </div>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+<div class="jumbotron">
+    <h1 class="display-4">The Mobile Drive Company</h1>
+    <p class="lead">A brief introduce</p>
+    <a class="btn btn-info btn-lg" href="./about.html" role="button">Learn more about us</a>
+    <hr class="my-4">
+    <h3>
+        Confirm Page
+    </h3>
+    <p>In this page, you can check and confirm the car rent information ans then submit</p>
+    <a class="btn btn-info btn-lg" href="./index.html" role="button">Back to Home Page</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <h2 id="caption">Rental</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h5>
+                Car Information
+            </h5>
+            <img src="./images/banner3.jpg" width="100%" alt="car info image"/>
+            <div class="row" style="margin-top: 20px">
+                <div class="container">
+                </div>
+                <table class="table table-hover  car-container">
+                    <tr><th>Make</th><th>Model</th><th>Year</th></tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <h5>Confirm rent information</h5>
+            <form>
+                <div class="form-group">
+                    <label for="address">Location</label>
+                    <input type="text" class="form-control" id="address" aria-describedby="address">
+                    <small id="address2" class="form-text text-muted">Please input the location</small>
+                </div>
+                <div class="form-group">
+                    <label for="st10">Lease start date</label>
+                    <input type="date" class="form-control" id="st10">
+                </div>
+                <div class="form-group">
+                    <label for="st1">Lease start time</label>
+                    <input type="time" class="form-control" id="st1">
+                </div>
+                <div class="form-group">
+                    <label for="st20">Return date</label>
+                    <input type="date" class="form-control" id="st20">
+                </div>
+                <div class="form-group">
+                    <label for="st2">Return time</label>
+                    <input type="time" class="form-control" id="st2">
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                </div>
+                <button type="reset" class="btn bth-lg btn-block btn-danger">Clear</button>
+            </form>
+            <button type="submit" class="btn bth-lg btn-block btn-primary"
+                    onclick="jump2pay()">Submit and Pay</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

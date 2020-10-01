@@ -3,16 +3,20 @@
     <title>
         Mobile Drive - Login
     </title>
-
+<style>
+h1 {text-align: center;}
+p {text-align: center;}
+div {text-align: center;}
+</style>
     <link href="https://cdn.bootcss.com/twitter-bootstrap/3.4.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 
 <body style="background-size: 100%;background-image:url(images/11.jpg)">
-    //backgound picture 
 
-
-<div class="modal-dialog" style="center; margin-top: 10%;">
+<h1>Welcome to Mobile Drive</h1>
+<p>User login</p>
+<div class="modal-dialog" style="margin-top: 10%;">
     <div class="modal-content">
         <div class="modal-header">
 
@@ -45,22 +49,22 @@
 
 <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-firestore.js"></script>
 
 <script>
     // Initialize Firebase
     var firebaseConfig = {
-apiKey: "AIzaSyBIJDb7ZswGPEW2XAMq1rlc8DCvrwcONbU",
-    authDomain: "mobile-drive-74c1a.firebaseapp.com",
-    databaseURL: "https://mobile-drive-74c1a.firebaseio.com",
-    projectId: "mobile-drive-74c1a",
-    storageBucket: "mobile-drive-74c1a.appspot.com",
-    messagingSenderId: "565185537341",
-    appId: "1:565185537341:web:f083a8bc1d13e3770c5154"
+        apiKey: "AIzaSyD_gcMOfUCGhDgsv6kbE_oQkEC6kRR66jo",
+        authDomain: "mobile-drive-56512.firebaseapp.com",
+        databaseURL: "https://mobile-drive-56512.firebaseio.com",
+        projectId: "mobile-drive-56512",
+        storageBucket: "mobile-drive-56512.appspot.com",
+        messagingSenderId: "167101083432",
+        appId: "1:167101083432:web:bcd322dc6f2ffe4ecb6a1d"
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
+
     function register()
     {
         window.location.href = 'register.html'
@@ -81,7 +85,7 @@ apiKey: "AIzaSyBIJDb7ZswGPEW2XAMq1rlc8DCvrwcONbU",
         {
             firebase.auth().signInWithEmailAndPassword(Email, Password).then(function () {
                 alert("Login success!")
-                window.location.href = 'first.html'
+                window.location.href = 'index.html'
             }).catch(function(error) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
@@ -90,7 +94,7 @@ apiKey: "AIzaSyBIJDb7ZswGPEW2XAMq1rlc8DCvrwcONbU",
         }
         else
         {
-            alert("The password can not be empty!") // here password has to be a standard level which can be at least one captial letter or  number character 
+            alert("The password can not be empty!")
         }
     }
     // firebase.auth().onAuthStateChanged(function(user) {
