@@ -2,144 +2,59 @@
     <head>
         <meta charset="UTF-8">
         <title>
-            CAR RENT
+            Payment Checkout Form
         </title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" type="text/css">
-        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.10.0/jquery.min.js" type="text/javascript"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFG61fggYOgHnu8ne79Q4OFSlzAuo9cBE&amp;callback=initMap" async="" defer type="text/javascript"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js" type="text/javascript"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js" type="text/javascript"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-analytics.js" type="text/javascript"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-firestore.js" type="text/javascript"></script>
-        <script src="static/main.js" type="text/javascript"></script>
-        <script>
-                    // Initialize Firebase
-    var firebaseConfig = {
-        apiKey: "AIzaSyD_gcMOfUCGhDgsv6kbE_oQkEC6kRR66jo",
-        authDomain: "mobile-drive-56512.firebaseapp.com",
-        databaseURL: "https://mobile-drive-56512.firebaseio.com",
-        projectId: "mobile-drive-56512",
-        storageBucket: "mobile-drive-56512.appspot.com",
-        messagingSenderId: "167101083432",
-        appId: "1:167101083432:web:bcd322dc6f2ffe4ecb6a1d"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-                </script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" type="text/css">
+
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js" type="text/javascript">
+</script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous" type="text/javascript">
+</script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous" type="text/javascript">
+</script>
+        <link rel="stylesheet" href="styles.css" type="text/css">
         <script type="text/javascript">
-            var map;
-            var markers = [];
-            var latlng = '';
-            var first = true;
-            var curInfoWindows = null;
-            var searchFlag = [];
-            function initMap(){
-                let params = GetRequest();
-                var caption = document.getElementById("caption")
-                
-                if (caption != null){
-                    caption.innerHTML = 'Mobile Drive - ' + params.name
-                }
-                latlng = new google.maps.LatLng(params.lat, params.lng);
-                var opts = {
-                    zoom:17,
-                    center:latlng,
-                }
-                if(!map){
-                    map = new google.maps.Map(document.getElementById("googleMap"),opts);
-                    var icon = 'http://maps.google.com/mapfiles/ms/micons/green.png';
-                    map.setCenter(latlng);
-                    var marker = new google.maps.Marker({
-                        map:map,
-                        icon:icon,
-                        position:latlng,
-                    });
-                    var content = '<span>'+ params.name +'<\/span>';
-                    var infowindow = new google.maps.InfoWindow({ content: content });
-                    marker.curInfoWindows = infowindow;
-                    infowindow.open(map,marker);
-                }
-            }
+function makePay() {
+        alert("pay success");
+        window.location.href="./index.html";
+        }
         </script>
     </head>
     <body>
-        <div class="container">
-            <div class="row">
-                <h2 id="caption">
-                    Mobile Drive
-                </h2><button class="btn btn-primary" onclick="window.location.href='index.html'">Home</button> <button class="btn btn-default" onclick="window.location.href='orders.html'">Orders</button>
+        <div class="wrapper">
+            <div class="payment">
+                <div class="payment-logo">
+                    <p>
+                        p
+                    </p>
+                </div>
+                <h2>
+                    Payment Gateway
+                </h2>
+                <div class="form">
+                    <div class="card space icon-relative">
+                        <label class="label">Card holder:</label> <input type="text" class="input" placeholder="Coding Market">
+                    </div>
+                    <div class="card space icon-relative">
+                        <label class="label">Card number:</label> <input type="text" class="input" data-mask="0000 0000 0000 0000" placeholder="Card Number">
+                    </div>
+                    <div class="card-grp space">
+                        <div class="card-item icon-relative">
+                            <label class="label">Expiry date:</label> <input type="text" name="expiry-data" class="input" data-mask="00 / 00" placeholder="00 / 00">
+                        </div>
+                        <div class="card-item icon-relative">
+                            <label class="label">CVC:</label> <input type="text" class="input" data-mask="000" placeholder="000">
+                        </div>
+                    </div>
+                    <div class="btn-lg btn-success text-center" onclick="{makePay()}">
+                        Pay
+                    </div>
+                    <div class="btn-lg btn-danger text-center" onclick="{window.location.href = './orders.html'}">
+                        Back to orders page
+                    </div>
+                </div>
             </div>
-            <div class="row">
-                <div id="googleMap" style="height:400px;min-height:400px;border:1px solid #ddd;"></div>
-            </div>
-            <div class="row" style="margin-top: 20px">
-                <table class="table table-hover car-container">
-                    <tr>
-                        <th>
-                            Make
-                        </th>
-                        <th>
-                            Model
-                        </th>
-                        <th>
-                            Year
-                        </th>
-                        <th>
-                            Option
-                        </th>
-                    </tr>
-                </table>
-            </div>
-        </div><script type="text/javascript">
-        setTimeout(function (){
-            initCars()
-        },1000)
-
-        function initCars()
-        {
-        let params = GetRequest();
-        if (cars.length <= 0)
-        {
-            initCars();
-        }
-
-        if (params)
-        {
-            let id = params.id
-            let carInfo = cars.filter(function (car)
-            {
-                return car.in_use == false && car.site_id == id;
-            })
-
-            var t = ''
-            $.each(carInfo, function (k,v)
-            {
-                t += `<tr><td>${ v.make }<\/td><td>${ v.model }<\/td><td>${ v.year }<\/td><td><button class="btn btn-sm btn-primary order-car" data-car-id="${ v.id }" data-site-id="${ v.site_id }">Pick Up<\/button><\/td><\/tr>`
-            })
-            $('.car-container').append(t)
-
-        }
-        }
-        $('body').on('click', '.order-car', function ()
-        {
-        let car_id = $(this).data('car-id')
-        let site_id = $(this).data('site-id')
-        db.collection("orders").add({
-            car_id: car_id,
-            site_id: site_id,
-            uid: UID,
-            returned: false
-        })
-        .then(function()
-        {
-            alert('success')
-        })
-        .catch(function(error)
-        {
-            console.error("Error adding document: ", error);
-        });
-        })
-        </script>
+        </div>
     </body>
 </html>
