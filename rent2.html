@@ -65,6 +65,7 @@
     </script>
 
     <script>
+        let carinfo;
         setTimeout(function ()
         {
             initCars()
@@ -85,11 +86,14 @@
                 {
                     return car.in_use == false && car.site_id == id;
                 });
-                var t = '';
+                console.log(carInfo);
+                carinfo = carInfo;
+                let t = '';
                 $.each(carInfo, function (k,v)
                 {
+                    tmp = [v.id, v.site_id];
                     t += `<tr><td>${ v.make }</td><td>${ v.model }</td><td>${ v.year }</td>
-                    <td><button class="btn btn-sm btn-primary order-car" data-car-id="${ v.id }" data-site-id="${ v.site_id }">Pick Up</button></td></tr>`
+                    <td><button class="btn btn-sm btn-primary order-car" value="${tmp}" onclick="pickup(this.value)">Pick Up</button></td></tr>`
                 });
                 $('.car-container').append(t);
             }
@@ -98,15 +102,18 @@
         /**
          * 租车
          */
-        $('body').on('click', '.order-car', function ()
-        {
-            let car_id = $(this).data('car-id');
-            let site_id = $(this).data('site-id');
+
+        function pickup(v1){
+
+            let car_id = v1[0];
+            let site_id = v1[1];
+            console.log(v1, car_id, site_id);
             // db.collection("cars").where('id', '==', car_id).update(
             //         {
             //             [in_use]: true
             //         }
             // )
+            console.log(car_id, site_id);
             console.log('start pick up');
             db.collection("orders").add({
                 car_id: car_id,
@@ -114,28 +121,10 @@
                 uid: UID,
                 returned: false
             }).then(function()
-                {
-                    alert('success');
-                    // console.log("Document written with ID: ", docRef.id);
-                    window.location.href = './confirmOrder.html?carID=' + car_id + '&siteID=' + site_id;
-                })
-                .catch(function(error)
-                {
-                    console.error("Error adding document: ", error);
-                });
-        });
-
-        function pickup(carID, siteID){
-            db.collection("orders").add({
-                car_id: carID,
-                site_id: siteID,
-                uid: UID,
-                returned: false
-            }).then(function()
             {
                 alert('success');
                 // console.log("Document written with ID: ", docRef.id);
-                window.location.href = './confirmOrder.html?carID=' + carID + '&siteID=' + siteID;
+                window.location.href = './confirmOrder.html?carID=' + car_id + '&siteID=' + site_id;
             })
                 .catch(function(error)
                 {
