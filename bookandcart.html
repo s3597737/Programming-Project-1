@@ -101,9 +101,6 @@ onclick="returnCar()">Return</button></td></tr>`;
             window.location.href='./index.html';
         }
 
-
-
-
     </script>
 </head>
 <body>
@@ -153,18 +150,32 @@ onclick="returnCar()">Return</button></td></tr>`;
     <h1 class="display-4">The Mobile Drive Company</h1>
     <p class="lead">LOVE THE ROAD, MAKE YOUR TRIP MEMORABLE</p>
     <hr class="my-4">
-    <p>Orders Page: this page shows all the orders</p>
+    <p>Orders Page: this page shows all the Booking detail and Carts</p>
 </div>
 
 <div class="container">
     <div class="row">
-        <h2>Mobile Drive - Orders History</h2>
+        <h2>Mobile Drive - Booking detail and Carts</h2>
+        <hr>
     </div>
 
     <div class="row" style="margin-top: 20px">
-        <table class="table table-hover car-container">
-            <tr><th>Name</th><th>Make</th><th>Model</th><th>Year</th><th>Returned</th><th>Option</th></tr>
-        </table>
+
+        <div class="col-sm-6">
+            <h4>Booking Detail</h4>
+            <hr>
+            <table class="table table-hover car-container">
+                <tr><th>Name</th><th>Make</th><th>Model</th><th>Year</th><th>Returned</th><th>Option</th></tr>
+            </table>
+        </div>
+        <div class="col-sm-6">
+            <h4>Carts</h4>
+            <hr>
+            <table class="table table-hover car-container2">
+                <tr><th>Name</th><th>Make</th><th>Model</th><th>Year</th><th>Payed</th><th>Option</th></tr>
+            </table>
+        </div>
+
     </div>
 </div>
 </body>

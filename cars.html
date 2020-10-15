@@ -111,49 +111,22 @@
             let uid = email.replaceAll('.','');
             console.log('uid:', uid);
             userID = uid;
-            db.collection("Order")
+            db.collection("carInfo")
                 .get()
                 .then(function(querySnapshot) {
                     querySnapshot.forEach(function(doc) {
                         // doc.data() is never undefined for query doc snapshots
-                        // console.log(doc.id, " => ", doc.data());
-                        let data = doc.data();
-                        console.log('data:', data);
-                        console.log('uid:', uid);
-                        if(data.ifCheck == false){
-                            console.log('data1:', data);
-                            if(data.uid == uid){
-                                console.log('data2:', data);
-                                let cid = parseInt(data.car_id);
-                                carID = cid;
-                                console.log('cid: ', cid);
-                                db.collection("carInfo")
-                                    .get()
-                                    .then(function(querySnapshot) {
-                                        querySnapshot.forEach(function(doc) {
-                                            // doc.data() is never undefined for query doc snapshots
-                                            //console.log(doc.id, " => ", doc.data());
-                                            //console.log(doc.data()['Car id']);
-                                            let cd = doc.data();
-                                            if(cd['Car id'] == cid){
-                                                let t = '';
-                                                let v = cd;
-                                                t += `<tr><td>${ v['Car name'] }</td><td>${ v['Car make'] }</td>
+                        //console.log(doc.id, " => ", doc.data());
+                        //console.log(doc.data()['Car id']);
+                        let cd = doc.data();
+                        let t = '';
+                        let v = cd;
+                        let picsrc = './images/'+v.carPic;
+                        let img = `<td><img src="${picsrc}" width="100%"
+                                                        alt="car info image" id="carPicBox"/></td>`;
+                        t += `<tr>`+img+`<td>${ v['Car name'] }</td><td>${ v['Car make'] }</td>
                             <td>${ v['Car model'] }</td><td>${ v['Car year'] }</td></tr>`;
-                                                $('.car-container').append(t);
-                                                let picsrc = './images/'+v.carPic;
-                                                let ps = document.getElementById('carPicBox');
-                                                console.log(picsrc);
-                                                ps.setAttribute("src",picsrc);
-                                            }
-
-                                        });
-                                    })
-                                    .catch(function(error) {
-                                        console.log("Error getting documents: ", error);
-                                    });
-                            }
-                        }
+                        $('.car-container').append(t);
                     });
                 })
                 .catch(function(error) {
@@ -210,62 +183,53 @@
     <h1 class="display-4">The Mobile Drive Company</h1>
     <p class="lead">LOVE THE ROAD, MAKE YOUR TRIP MEMORABLE</p>
     <hr class="my-4">
-    <h3>
-        Confirm Page
+    <h3 style="padding-left: 20%">
+        Find Your Favourite Car Here
     </h3>
-    <p>In this page, you can check and confirm the car rent information ans then submit</p>
 </div>
 
 <div class="container">
     <div class="row">
-        <h2 id="caption">Rental</h2>
+        <h2 id="caption">Cars Information</h2>
     </div>
+    <hr>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
+            <h4>Filter by Labels</h4>
+            <ul class="list-group">
+                <li class="list-group-item">Car Name</li>
+                <li class="list-group-item">Car Make</li>
+                <li class="list-group-item">Car Model</li>
+                <li class="list-group-item">Year of Car</li>
+            </ul>
+            <button type="submit" class="btn bth-lg btn-block btn-primary"
+                    >Filter</button>
+            <hr>
+            <h4>Search with Address</h4>
+            <form>
+                <div class="form-group">
+                    <label for="st2">Address</label>
+                    <input type="text" class="form-control" id="st2">
+                </div>
+            </form>
+            <button type="submit" class="btn bth-lg btn-block btn-primary"
+                    >Search</button>
+        </div>
+        <div class="col-sm-8">
             <h5>
                 Car Information
             </h5>
-            <img src="./images/banner3.jpg" width="100%" alt="car info image" id="carPicBox"/>
             <div class="row" style="margin-top: 20px">
                 <div class="container">
                 </div>
                 <table class="table table-hover  car-container">
-                    <tr><th>Name</th><th>Make</th><th>Model</th><th>Year</th></tr>
+                    <tr>
+                        <th>
+                            Car Picture
+                        </th>
+                        <th>Name</th><th>Make</th><th>Model</th><th>Year</th></tr>
                 </table>
             </div>
-        </div>
-        <div class="col-sm-4">
-            <h5>Confirm Book Information</h5>
-            <form>
-                <div class="form-group">
-                    <label for="address">Location</label>
-                    <input type="text" class="form-control" id="address" aria-describedby="address">
-                    <small id="address2" class="form-text text-muted">Please input the location</small>
-                </div>
-                <div class="form-group">
-                    <label for="st10">Lease start date</label>
-                    <input type="date" class="form-control" id="st10">
-                </div>
-                <div class="form-group">
-                    <label for="st1">Lease start time</label>
-                    <input type="time" class="form-control" id="st1">
-                </div>
-                <div class="form-group">
-                    <label for="st20">Return date</label>
-                    <input type="date" class="form-control" id="st20">
-                </div>
-                <div class="form-group">
-                    <label for="st2">Return time</label>
-                    <input type="time" class="form-control" id="st2">
-                </div>
-                <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div>
-                <button type="reset" class="btn bth-lg btn-block btn-danger">Clear</button>
-            </form>
-            <button type="submit" class="btn bth-lg btn-block btn-primary"
-                    onclick="jump2pay()">Submit and Confirm</button>
         </div>
     </div>
 </div>
