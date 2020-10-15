@@ -1,182 +1,262 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>	
-		<link rel="stylesheet" type="text/css" href="./bootstrap.min.css"/>
-		<script src="./bootstrap.min.js"></script>
-		<style type="text/css">
-			form {
-				/* box-sizing:content-box;
-						-moz-box-sizing:content-box; /* Firefox */
-				*/ border: 1px solid darkgray;
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>My Profile</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet"
+		  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		  integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+		  crossorigin="anonymous">
+	<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+			integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+			crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+			integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+			crossorigin="anonymous"></script>
+
+	<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-firestore.js"></script>
+
+	<script src="static/dbInfo.js"></script>
+
+	<script>
+		//alert('start');
+		let bd, pn, dlt, dln, un, ufn, uln, em;
+		firebase.auth().onAuthStateChanged(function(user) {
+			if (user) {
+				console.log("User is signed in.");
+				loadUserProfile();
+				loadimg();
+			} else {
+				alert("No user is signed in, back to home page");
+				window.location.href="./index.html";
+			}
+		});
+
+		function loadUserProfile(){
+			let user = firebase.auth().currentUser;
+			let email;
+
+			if (user != null) {
+				email = user.email;
 			}
 
-			#Div0 {
-				float: left;
-				width: 1000px;
-				height: 800px;
-				margin: auto;
-				position: absolute;
-				top: 10%;
-				left: 0;
-				right: 0;
-				bottom: 0;
-			}
+			console.log(email);
+			let uid = email.replaceAll('.','');
+			console.log(uid);
+			let dataRef = db.collection("userInfo").doc(uid);
 
-			#left {
-				float: left;
-				/* background-color:gray; */
-				width: 300px;
-				height: 280px;
-				margin-left: 20px;
-			}
+			dataRef.get().then(function(doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data());
+					let data = doc.data();
+					un = data.username;
+					pn = data.phoneNumber;
+					em = data.email;
+					dlt = data.dlt;
+					dln = data.dln;
+					bd = data.birthday;
+					ufn = un.split(' ')[0];
+					uln = un.split(' ')[1];
+					console.log(un, dlt);
 
-			#left img {
-				height: 150px;
-				width: 150px;
-				border: #000000;
-				margin-left: 75px;
-			}
+					let ufnv = document.getElementById("ufn");
+					let ulnv = document.getElementById("uln");
+					let bdv = document.getElementById("bd");
+					let pnv = document.getElementById("pn");
+					let dltv = document.getElementById("dlt");
+					let dlnv = document.getElementById("dln");
 
-			#left div {
+					ufnv.value = ufn;
+					ulnv.value = uln;
+					bdv.value = bd;
+					pnv.value = pn;
+					dltv.value = dlt;
+					dlnv.value = dln;
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+			}).catch(function(error) {
+				console.log("Error getting document:", error);
+			});
+		}
 
-				text-align: center;
-				margin-top: 4%;
-			}
+		function loadimg(){
 
-			#left span {
-				display: inline-block;
-				border: 1px solid #000000;
-				padding-right: 20px;
-				font-size: 18px;
-			}
+		}
 
-			#right {
-				/* background-color:green; */
-				width: 600px;
-				height: 800px;
-				float: right;
-				margin-right: 50px;
-				border: 1px solid #999999;
-			}
+		function edit(){
+			console.log('start edit');
+			let ufnv = document.getElementById("ufn");
+			let ulnv = document.getElementById("uln");
+			let bdv = document.getElementById("bd");
+			let pnv = document.getElementById("pn");
+			let dltv = document.getElementById("dlt");
+			let dlnv = document.getElementById("dln");
 
-			#right h3 {
-				border-bottom: 1px solid #999999;
-				text-align: center;
-			}
+			let un = ufnv.value.replaceAll(' ','')+' '+ulnv.value.replaceAll(' ','');
+			let bd = bdv.value;
+			let pn = pnv.value;
+			let dlt = dltv.value;
+			let dln = dlnv.value;
 
-			form li {
-				list-style-type: none;
-				font-size: 22px;
-			}
+			let user = firebase.auth().currentUser;
+			let email = user.email;
+			let uid = email.replaceAll('.','');
+			let data = {
+				username: un,
+				birthday: bd,
+				phoneNumber: pn,
+				dlt: dlt,
+				dln: dln
+			};
 
-			form .sub {
-				display: block;
-				margin: 0 auto;
-				margin-top: 20px;
-			}
-            
-            
-            .image-preview{
-                width:300px;
-                min-height:100px;
-                border: 2px solid #dddddd;
-                margin-top: 15px;
-                
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: bold;
-                color:#cccccc;
-            
-            }            
-            
-            .image-preview__image{
-                display: none;
-                width:100%;
-                
-            }
-            
-            
-		</style>
-	</head>
-	<body>
-		<div class="" id="Div0">
+			console.log('update: ', uid, data);
+			db.collection("userInfo").doc(uid).update(data)
+					.then(function() {
+						console.log("Document successfully updated!");
+						alert('update profile successfully!');
+						window.location.href='./index.html';
+					})
+					.catch(function(error) {
+						console.error("Error writing document: ", error);
+					});
+		}
+	</script>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light sticky-top" style="background-color: #e3f2fd;">
+	<a class="navbar-brand mb-0 h1" href="#">Mobile Drive</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="./index.html">Home Page<span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="./about.html">About us</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="./book.html">Book now</a>
+			</li>
+			<li class="nav-item active">
+				<a class="nav-link disabled active" href="./orders.html">Orders</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="./userprofile.html">User Profile</a>
+			</li>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Others
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="#">other1</a>
+					<a class="dropdown-item" href="#">other2</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="#">Waiting for More</a>
+				</div>
+			</li>
+		</ul>
+		<form class="form-inline my-2 my-lg-0">
+			<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		</form>
+	</div>
+</nav>
+<div class="jumbotron" style="background-image: url(./images/bgpic3.jpg); background-size:100%">
+	<h1 class="display-4">The Mobile Drive Company</h1>
+	<hr class="my-4">
+	<h3>
+		My Profile
+	</h3>
+	<p>You can check your profile in this page, you can also make some modify and click 'submit' to submit.</p>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-3" style="margin-top: 5%">
 			<div class="left" id="left">
-				<img src="./photo.jpg" alt="">
-				<div>
-					<span>Photo</span>
+				<div  id="imagePreview">
+					<img src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" width="100%" alt="image Preview" class="image-preview__image">
+					<span>image preview</span>
 				</div>
 			</div>
-            
-            <input type="file" name="inputFile" id="inpFile">
-            <div class ="image-preview" id="imagePreview">
-                <img src="" alt="image Preview" class="image-preview__image">
-                <span class="image-preview__default-text">image Preview</span>
-            </div>
-            
-            
-            <script>
-                const inpFile = document.getElementById("inpFile");
-                const previewContainer = document.getElementById("imagePreview");
-                const previewImage = previewContainer.querySelector(".image-preview__image");
-                const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
-             
-                inpFile.addEventListener("change",function() {
-                    const file = this.files[0];
-                    
-               
-                if(file){
-                    const reader = new FileReader();
-                    
-                    previewDefaultText.style.display = "none";
-                    previewImage.style.display = "block";
-                    
-                    reader.addEventListener("load",function(){
-                        
-                        previewImage.setAttribute("src",this.result);
-                    });
-                    
-                    reader.readAsDataURL(file);
-                }else{
-                    previewDefaultText.style.display = "null";
-                    previewImage.style.display = "null";
-                    previewImage.setAttribute("src","");
-                }
-                    
-                });
-                
-                </script>
-            
-                
- 
-            
-            
-                
-                
-                
-			<div class="right" id="right">
-				<form action="" method="post" class="form-horizontal ">
-					<h3 class="border border-dark">User Profile</h3>
-					<div class="col-xs-12 col-md-12 ">
-						<li>user name:<input type="text" name="username" class="form-control"></li><br>
-						<li>user email:<input type="email" name="useremail" class="form-control" /></li>
-						<li>password:<input type="password" name="password" class="form-control" /></li>
-						<li>phone number:<input type="tel" name="phone number" class="form-control" /></li>
-						<li>emergency contact:<input type="text" class="form-control" /></li>
-						<li>valid:<input type="text" class="form-control" /></li>
-						<li>driving licence:<input type="text" class="form-control" /></li>
-						<li>licence type:<input type="text" class="form-control" /></li>
-						<li>issue place<input type="text" class="form-control" /></li>
-						<li>insurance(optional)<input type="text" class="form-control" /></li>
-						<input type="submit" value="save" class="btn btn-primary sub" />
-					</div>
+			<input type="file" name="inputFile" id="inpFile">
+			<script>
+				const inpFile = document.getElementById("inpFile");
+				const previewContainer = document.getElementById("imagePreview");
+				const previewImage = previewContainer.querySelector(".image-preview__image");
+				const previewDefaultText = previewContainer.querySelector(".image-preview__default-text");
 
-				</form>
-
-			</div>
+				inpFile.addEventListener("change",function() {
+					const file = this.files[0];
+					if(file){
+						const reader = new FileReader();
+						previewImage.style.display = "block";
+						reader.addEventListener("load",function(){
+							previewImage.setAttribute("src",this.result);
+						});
+						reader.readAsDataURL(file);
+					}else{
+						previewDefaultText.style.display = "null";
+						previewImage.style.display = "null";
+						previewImage.setAttribute("src","");
+					}
+				});
+			</script>
 		</div>
+		<div class="col-sm-9" style="margin-top: 5%; width: 100%">
+			<div class="modal-content">
+				<div class="modal-header text-center">
+					<h4>My Profile</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="ufn">User first name</label>
+						<input type="text" class="form-control" placeholder="User name" id="ufn">
+					</div>
+					<div class="form-group">
+						<label for="uln">User last name</label>
+						<input type="text" class="form-control" placeholder="User name" id="uln">
+					</div>
+					<div class="form-group">
+						<label for="bd">Birthday</label>
+						<input type="date" class="form-control" placeholder="Birthday" id="bd">
+					</div>
+					<div class="form-group">
+						<label for="pn">Phone number</label>
+						<input type="number" class="form-control" placeholder="Phone word" id="pn">
+					</div>
+					<div class="form-group">
+						<label for="dlt">Driving licence type</label>
+						<select class="form-control" id="dlt">
+							<option>Australian</option>
+							<option>International</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="dln">Driving licence number</label>
+						<input type="number" class="form-control" placeholder="Driving licence number" id="dln">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="form-group">
+						<button type="button" class="btn btn-success form-control" onclick="edit()">Submit</button>
+					</div>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
 
-	</body>
+	</div>
+
+</div>
+
+</body>
 </html>
