@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Order</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+          crossorigin="anonymous">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-firestore.js"></script>
+
+    <script src="static/main.js"></script>  <!-- linkJavaScript -->
+    <script>
+        // function setting 
+        let carID;
+        let userID;
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                console.log("User is signed in.");
+                initCars();
+            } else {
+                alert("No user is signed in, back to home page");
+                window.location.href="./index.html";
+            }
+        });
+
+        function jump2pay(){
+            let lsd = document.getElementById('st10').value;
+            let lst = document.getElementById('st1').value;
+            let rd = document.getElementById('st20').value;
+            let rt = document.getElementById('st2').value;
+            console.log(rd, '>', lsd, checkVail(lsd,lst,rd,rt));
+            if(!checkVail(lsd,lst,rd,rt))
+                return false;
+
+            let cp = 0;
+            //database on google firebase setting 
+            //ts1 weekday day time
+            //ts2 weekday night time
+            //ts1 weekend day time
+            //ts2 weekend night time
+            db.collection('carPrice').get().then(function(qs){
+                qs.forEach(function(doc){
+                    let data = doc.data();
+                    if(data.cpid == carID){
+                        console.log(rd.split('-'));
+                        let d1 = rd.split('-');
+                        let d2 = lsd.split('-');
+                        d1[0] = parseInt(d1[0]);
+                        d1[1] = parseInt(d1[1]);
+                        d1[2] = parseInt(d1[2]);
+                        d2[0] = parseInt(d2[0]);
+                        d2[1] = parseInt(d2[1]);
+                        d2[2] = parseInt(d2[2]);
+                        cp += (d1[0]-d2[0])*365*(data.ts1+data.ts2);
+                        cp += (d1[1]-d2[1])*30*(data.ts1+data.ts2);
+                        cp += (d1[2]-d2[2])*30*(data.ts1+data.ts2);
+                        if (d1[2] != d2[2])
+                            cp += (data.ts1+data.ts2);
+                        console.log(cp);
+
+                        db.collection("user-orders").add({
+                            car_id: carID,
+                            uid: userID,
+                            price: cp,
+                            ifPay: false,
+                            ifReturn: false,
+                        }).then(function()
+                        {
+                            alert('success');
+                            // console.log("Document written with ID: ", docRef.id);
+                            window.location.href="./pay2.html";
+                        })
+                            .catch(function(error) {
+                                console.error("Error adding document: ", error);
+                            });
+                    }
+                })
+            })
+            //check vali
+        }
+
+        function checkVail(lsd,lst,rd,rt){
+            console.log(lsd,lst,rd,rt);
+            return rd > lsd;
+        }
+
+        function initCars() {
+            //get uid
+            let user = firebase.auth().currentUser;
+            let email='';
+            if (user != null)
+                email = user.email;
+            let uid = email.replaceAll('.','');
+            console.log('uid:', uid);
+            userID = uid;
+            db.collection("carInfo")
+                .get()
+                .then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        // doc.data() is never undefined for query doc snapshots
+                        //console.log(doc.id, " => ", doc.data());
+                        //console.log(doc.data()['Car id']);
+                        let cd = doc.data();
+                        let t = '';
+                        let v = cd;
+                        let picsrc = './images/'+v.carPic;
+                        let img = `<td><img src="${picsrc}" width="100%"
+                                                        alt="car info image" id="carPicBox"/></td>`;
+                        t += `<tr>`+img+`<td>${ v['Car name'] }</td><td>${ v['Car make'] }</td>
+                            <td>${ v['Car model'] }</td><td>${ v['Car year'] }</td></tr>`;
+                        $('.car-container').append(t);
+                    });
+                })
+                .catch(function(error) {
+                    console.log("Error getting documents: ", error);
+                });
+        }//display 
+    </script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light sticky-top" style="background-color: #e3f2fd;"><!-- nav bar -->
+    <a class="navbar-brand mb-0 h1" href="#">Mobile Drive</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent"><!--button--->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="./index.html">Home Page<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./about.html">About us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./book.html">Book now</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link disabled active" href="./orders.html">Orders</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./userprofile.html">User Profile</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Others
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">other1</a>
+                    <a class="dropdown-item" href="#">other2</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Waiting for More</a>
+                </div>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+<div class="jumbotron" style="background-image: url(./images/bgpic1.jpg); background-size:100%">
+    <h1 class="display-4">The Mobile Drive Company</h1>
+    <p class="lead">LOVE THE ROAD, MAKE YOUR TRIP MEMORABLE</p>
+    <hr class="my-4">
+    <h3 style="padding-left: 20%">
+        Find Your Favourite Car Here
+    </h3>
+</div>
+
+<div class="container"><!---button and fliter lable-->
+    <div class="row">
+        <h2 id="caption">Cars Information</h2>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-4">
+            <h4>Filter by Labels</h4>
+            <ul class="list-group">
+                <li class="list-group-item">Car Name</li>
+                <li class="list-group-item">Car Make</li>
+                <li class="list-group-item">Car Model</li>
+                <li class="list-group-item">Year of Car</li>
+            </ul>
+            <button type="submit" class="btn bth-lg btn-block btn-primary"
+                    >Filter</button>
+            <hr>
+            <h4>Search with Address</h4>
+            <form>
+                <div class="form-group">
+                    <label for="st2">Address</label>
+                    <input type="text" class="form-control" id="st2">
+                </div>
+            </form>
+            <button type="submit" class="btn bth-lg btn-block btn-primary"
+                    >Search</button>
+        </div>
+        <div class="col-sm-8">
+            <h5>
+                Car Information
+            </h5>
+            <div class="row" style="margin-top: 20px">
+                <div class="container">
+                </div>
+                <table class="table table-hover  car-container">
+                    <tr>
+                        <th>
+                            Car Picture
+                        </th>
+                        <th>Name</th><th>Make</th><th>Model</th><th>Year</th></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
