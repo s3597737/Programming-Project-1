@@ -18,6 +18,8 @@ ss3715210 Developer(coding,testing)With skills in programming and use these skil
 
 # We have some function did not finish 
  1.Language trnasfer function on nav bar
+ 
  2.Search function on nav bar
+ 
  3.Contact us on nav bar 
  
