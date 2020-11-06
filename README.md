@@ -1,9 +1,11 @@
 # Programming-Project-1
 Final code upload
+
+
 Leader - Dong Zheng
 s3674609 Holder of product value,Designing. Project planning with features responsible for project requirements. 
 
-Scrum Team member - Feitong Sun
+Scrum Team master - Feitong Sun
 s3652652 Protect the scrum process responsible for ensuring the team lives agile values.
 
 Scrum Team member - Lang Chen
